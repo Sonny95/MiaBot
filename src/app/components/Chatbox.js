@@ -9,8 +9,8 @@ export default function Chatbox() {
   const [firstMessageSent, setFirstMessageSent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [recommendedQuestions, setRecommendedQuestions] = useState([
-    "Can you tell me about you?",
-    "How did you start programming?",
+    "Can you tell me about yourself?",
+    "What kind of personal projects have you worked on?",
     "What technologies do you specialize in?",
   ]);
   const chatContainerRef = useRef(null);

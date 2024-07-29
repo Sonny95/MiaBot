@@ -15,6 +15,7 @@ async function createThread() {
   }
 }
 
+//add message thread
 async function createMessage(threadId, userMessage) {
   try {
     await openai.beta.threads.messages.create(threadId, {
@@ -26,6 +27,7 @@ async function createMessage(threadId, userMessage) {
   }
 }
 
+// run assistant
 async function runAssistant(threadId) {
   try {
     const run = await openai.beta.threads.runs.createAndPoll(threadId, {
@@ -37,6 +39,7 @@ async function runAssistant(threadId) {
   }
 }
 
+// response from assistant
 async function getAssistantResponse(threadId, userMessage) {
   try {
     const messages = await openai.beta.threads.messages.list(threadId);
@@ -54,28 +57,6 @@ async function getAssistantResponse(threadId, userMessage) {
     throw new Error("Failed to retrieve messages. The error has been logged. Please try again.");
   }
 }
-
-// async function getAssistantResponse(threadId, userMessage) {
-//   try {
-//     const messages = await openai.beta.threads.messages.list(threadId);
-
-//     for (const message of messages.data) {
-//       if (message.role === "assistant") {
-//         let content = message.content.map((c) => c.text.value).join("\n");
-//         try {
-//           return { message: content };
-//         } catch (parseError) {
-//           console.error("Failed to parse JSON content:", content, parseError);
-//           throw new Error("Failed to parse JSON content.");
-//         }
-//       }
-//     }
-//     throw new Error("No assistant messages found.");
-//   } catch (error) {
-//     console.error("Error retrieving assistant response:", error);
-//     throw new Error("Failed to retrieve messages. The error has been logged. Please try again.");
-//   }
-// }
 
 export async function POST(request) {
   try {
