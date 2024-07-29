@@ -111,7 +111,7 @@ export default function Chatbox() {
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full">
             <Image
-              src="https://i.ibb.co/BjGyk8x/Kakao-Talk-Photo-2024-03-17-19-21-48.jpg"
+              src="https://i.ibb.co/j4Gk3v9/Screenshot-2024-07-29-at-11-10-04-PM.png"
               alt="My Picture"
               width={100}
               height={100}
@@ -119,6 +119,7 @@ export default function Chatbox() {
                 firstMessageSent ? "transform -translate-y-8 scale-150" : ""
               }`}
             />
+
             <p className="text-2xl font-bold text-gray-400">Ask anything about me</p>
           </div>
         ) : (
@@ -132,7 +133,7 @@ export default function Chatbox() {
               {msg.user === "MIA" && (
                 <>
                   <Image
-                    src="https://i.ibb.co/BjGyk8x/Kakao-Talk-Photo-2024-03-17-19-21-48.jpg"
+                    src="https://i.ibb.co/j4Gk3v9/Screenshot-2024-07-29-at-11-10-04-PM.png"
                     alt="Bot Picture"
                     width={40}
                     height={40}
