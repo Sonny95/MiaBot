@@ -11,6 +11,7 @@ async function createThread() {
     const thread = await openai.beta.threads.create();
     return thread.id;
   } catch (error) {
+    console.error("Error creating thread:", error);
     throw new Error("Failed to create thread.");
   }
 }
@@ -22,6 +23,7 @@ async function createMessage(threadId, userMessage) {
       content: userMessage,
     });
   } catch (error) {
+    console.error("Error creating message:", error);
     throw new Error("Failed to create message.");
   }
 }
@@ -33,6 +35,7 @@ async function runAssistant(threadId) {
     });
     return run;
   } catch (error) {
+    console.error("Error running assistant:", error);
     throw new Error("Failed to run assistant.");
   }
 }
@@ -41,18 +44,14 @@ async function getAssistantResponse(threadId, userMessage) {
   try {
     const messages = await openai.beta.threads.messages.list(threadId);
 
-    for (const message of messages.data) {
-      if (message.role === "assistant") {
-        let content = message.content.map((c) => c.text.value).join("\n");
-        try {
-          return { message: content };
-        } catch (parseError) {
-          console.error("Failed to parse JSON content:", content, parseError);
-          throw new Error("Failed to parse JSON content.");
-        }
-      }
+    const assistantMessage = messages.data.find((message) => message.role === "assistant");
+
+    if (assistantMessage) {
+      let content = assistantMessage.content.map((c) => c.text?.value || "").join("\n");
+      return { message: content };
+    } else {
+      throw new Error("No assistant messages found.");
     }
-    throw new Error("No assistant messages found.");
   } catch (error) {
     console.error("Error retrieving assistant response:", error);
     throw new Error("Failed to retrieve messages. The error has been logged. Please try again.");
@@ -79,17 +78,17 @@ export async function POST(request) {
 
     if (run.status === "completed") {
       const responseObject = await getAssistantResponse(threadId, userMessage);
-      const { message: responseMessage, recommend } = responseObject;
+      const { message: responseMessage } = responseObject;
 
       return NextResponse.json({
         thread_id: threadId,
         message: responseMessage,
-        recommend: recommend,
       });
     } else {
       return NextResponse.json({ error: `Assistant run status: ${run.status}` }, { status: 500 });
     }
   } catch (error) {
+    console.error("Error handling POST request:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
